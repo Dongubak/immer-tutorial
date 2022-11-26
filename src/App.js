@@ -74,7 +74,7 @@ const App = () => {
         <ul>
           {data.array.map((info) => (
             <li key={info.id} onClick={() => onRemove(info.id)}>
-              {info.username} {info.name}
+              {info.username} ({info.name})
             </li>
           ))}
         </ul>
