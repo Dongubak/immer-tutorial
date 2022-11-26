@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useCallback, useRef, useState } from "react";
+import produce from "immer";
 
 const App = () => {
   const nextId = useRef(1);
@@ -16,10 +17,11 @@ const App = () => {
   const onChange = useCallback(
     (e) => {
       const { name, value } = e.target;
-      setForm({
-        ...form,
-        [name]: [value],
-      });
+      setForm(
+        produce((draft) => {
+          draft[name] = value;
+        })
+      );
     },
     [form]
   );
@@ -31,10 +33,11 @@ const App = () => {
         name: form.name,
         username: form.username,
       };
-      setData({
-        ...data,
-        array: data.array.concat(info),
-      });
+      setData(
+        produce((draft) => {
+          draft.array.push(info);
+        })
+      );
       setForm({
         name: "",
         username: "",
@@ -55,7 +58,7 @@ const App = () => {
 
   return (
     <div>
-      <form onSumbit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <input
           name="username"
           placeholder="아이디"
@@ -65,7 +68,7 @@ const App = () => {
         <input
           name="name"
           placeholder="이름"
-          value={form.user}
+          value={form.name}
           onChange={onChange}
         ></input>
         <button type="submit">등록</button>
